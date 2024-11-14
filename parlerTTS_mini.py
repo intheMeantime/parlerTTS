@@ -4,8 +4,11 @@ from parler_tts import ParlerTTSForConditionalGeneration
 from transformers import AutoTokenizer
 import soundfile as sf
 import numpy as np
+import pandas as pd
 import time
 
+# MetaData
+metadata = pd.DataFrame(columns=['speakID', 'fileName', 'non', 'model', 'ANS'])
 
 # read output PATH
 file = open("path/output_path.txt", "r")
@@ -48,13 +51,22 @@ for (notation, speaker) in description.items() :
         # Split the audio array into 10-second segments and Save
         for i in range(0, len(audio_arr), chunking):
             chunk = audio_arr[i:i+chunking]
-            sf.write(path + f"/E03_{notation}_pmt_{now_index:06}.wav", chunk, sampling_rate)
+            filename = f"/E03_{notation}_pmt_{now_index:06}"
+
+            sf.write(path + filename + ".wav", chunk, sampling_rate)
+            metadata.loc[now_index] = [notation, filename, '-', 'E03', 'spoof']
+
             now_index += 1
 
 
         # print(f"{time.time()-start:.2f} sec")
         # check
         if index % 10 == 0 :
-            print(f'now : {index}')
+            print(f'now : {notation}_{index}')
             print(f"{time.time()-past_time:.2f} sec") 
             past_time = time.time()
+
+
+# E03 == parlerTTS
+metadata.to_csv(f'{path}/E03_m_spoof.csv', sep= ' ', index=False, header=False)
+print(f"total duration: {time.time()-start:.2f} sec")

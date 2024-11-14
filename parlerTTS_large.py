@@ -39,7 +39,7 @@ start = time.time()
 past_time = start
 for (notation, speaker) in description.items() :
     now_index = 0
-    for index in range(len(ds['train'])) :
+    for index in range(0, len(ds['train'])) :
         prompt = ds['train'][index]['prompt']
         # print(prompt)
 
@@ -57,16 +57,17 @@ for (notation, speaker) in description.items() :
 
             sf.write(path + filename + ".wav", chunk, sampling_rate)
             metadata.loc[now_index] = [notation, filename, '-', 'E03', 'spoof']
-            
+
             now_index += 1
 
 
         # print(f"{time.time()-start:.2f} sec") 
         # check
         if index % 10 == 0 :
-            print(f'now : {index}')
+            print(f'now : {notation}_{index}')
             print(f"{time.time()-past_time:.2f} sec") 
             past_time = time.time()
 
 # E03 == parlerTTS
 metadata.to_csv(f'{path}/E03_l_spoof.csv', sep= ' ', index=False, header=False)
+print(f"total duration: {time.time()-start:.2f} sec")
