@@ -51,9 +51,9 @@ for (notation, speaker) in description.items() :
         # Split the audio array into 10-second segments and Save
         for i in range(0, len(audio_arr), chunking):
             chunk = audio_arr[i:i+chunking]
-            filename = f"/E03_{notation}_pmt_{now_index:06}"
+            filename = f"/E03_{notation}_pmt_{now_index:06}.wav"
 
-            sf.write(path + filename + ".wav", chunk, sampling_rate)
+            sf.write(path + filename, chunk, sampling_rate)
             metadata.loc[now_index] = [notation, filename, '-', 'E03', 'spoof']
 
             now_index += 1
