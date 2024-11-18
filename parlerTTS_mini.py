@@ -20,11 +20,12 @@ ds = load_dataset("fka/awesome-chatgpt-prompts")
 
 # ParlerTTS mini model load
 device = "cuda:0" if torch.cuda.is_available() else "cpu"
+print('device:', device)
 model = ParlerTTSForConditionalGeneration.from_pretrained("parler-tts/parler-tts-mini-v1").to(device)
 tokenizer = AutoTokenizer.from_pretrained("parler-tts/parler-tts-mini-v1")
 
 # mini model's top 5 speaker, ranked by their average speaker similarity scores + background noise
-description = {"m1":"Will's voice. And very noisy audio", "m2":"Eric's voice.", "m3":"Laura's voice.", "m4":"Alisa's voice.", "m5":"Patrick's voice."}
+description = {"m1":"Will's voice. And very noisy audio.", "m2":"Eric's voice. And very noisy audio.", "m3":"Laura's voice. And very noisy audio.", "m4":"Alisa's voice. And very noisy audio.", "m5":"Patrick's voice. And very noisy audio."}
 
 print("up to here completed")
 
@@ -51,10 +52,10 @@ for (notation, speaker) in description.items() :
         # Split the audio array into 10-second segments and Save
         for i in range(0, len(audio_arr), chunking):
             chunk = audio_arr[i:i+chunking]
-            filename = f"/E03_{notation}_pmt_{now_index:06}.wav"
+            filename = f"E03_{notation}_pmt_{now_index:06}.wav"
 
-            sf.write(path + filename, chunk, sampling_rate)
-            metadata.loc[now_index] = [notation, filename, '-', 'E03', 'spoof']
+            sf.write(f'{path}mini/{filename}', chunk, sampling_rate)
+            metadata = metadata.loc[len(metadata)] = [notation, filename, '-', 'E03', 'spoof']
 
             now_index += 1
 
@@ -68,5 +69,5 @@ for (notation, speaker) in description.items() :
 
 
 # E03 == parlerTTS
-metadata.to_csv(f'{path}/E03_m_spoof.csv', sep= ' ', index=False, header=False)
+metadata.to_csv(f'{path}mini/E03_m_spoof.csv', sep= ' ', index=False, header=False)
 print(f"total duration: {time.time()-start:.2f} sec")
