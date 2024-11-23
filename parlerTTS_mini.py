@@ -69,5 +69,5 @@ for (notation, speaker) in description.items() :
 
 
 # E03 == parlerTTS
-metadata.to_csv(f'{path}mini/E03_m_spoof.csv', sep= ' ', index=False, header=False)
+metadata.to_csv(f'{path}mini/E03_mimi_spoof.csv', sep= ' ', index=False, header=False)
 print(f"total duration: {time.time()-start:.2f} sec")
